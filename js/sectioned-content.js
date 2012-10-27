@@ -11,6 +11,8 @@ var SECTIONED = (function (module) {
 
         var el = {};
         var wpEditorTemplate;
+        var panelPrefix = 'sectioned-post-';
+        var tabStore;
 
         init();
 
@@ -23,10 +25,15 @@ var SECTIONED = (function (module) {
 
             $.when(loadTabs())
                 .then(function(tabs){
+
                     initTabs();
 
-                    // have to add the new tab button after the tabs have been setup
+                    // have to add the new tab button after the tabs have been initiated
                     addNewTabBtn();
+
+                    tabStore = tabs;
+
+                    buildTabs()
                 });
 
         };
@@ -37,6 +44,12 @@ var SECTIONED = (function (module) {
                 .wrap('<div id="sectioned-content" class="sectioned-content"><div id="sectioned-post-1" class="tab-content"></div></div>');
 
             el.tabs = $('#sectioned-content'); // cache the tabs element
+
+            el.tabs.prepend(
+                '<ul class="nav-tabs"><li><a href="#sectioned-post-1">Section 1</a></li></ul>'
+            );
+
+            el.tabNav = $('.nav-tabs'); // cache the nav tabs
         }
 
         function compileHandlebars(){
@@ -49,15 +62,16 @@ var SECTIONED = (function (module) {
                 add: function(event, ui) {
                     var tab = '#' + ui.panel.id;
 
-                    el.tabs.tabs('select', tab); // automatically select tab
+                    //el.tabs.tabs('select', tab); // automatically select tab
 
-                    /* get the current post id, then setup the wp-editor
+                    /* setup the wp-editor
                     ----------------------------------------------------- */
                     $(tab).append(
                         wpEditorTemplate({
                             id: "editor-" + ui.panel.id,
                             post_id: sectionedcontent.postId, // outputed using wp_localize_script()
-                            admin_url: userSettings.url
+                            admin_url: userSettings.url,
+                            content: getTabContent(ui.panel.id)
                         })
                     );
 
@@ -67,16 +81,34 @@ var SECTIONED = (function (module) {
             });
         }
 
-        function buildTabNavs(items){
-            var out = '<ul class="nav-tabs">';
+        function getTabContent(panelId){
+            var id, content
 
-            out = out + '<li><a href="#sectioned-post-1">Section 1</a></li>';
+            id = parseInt(panelId.replace(panelPrefix, ''));
 
-            for(var i=2, l=items.length; i<l+2; i++) {
-                out = out + '<li><a href="#sectioned-post-'+ i +'">Section ' + i + '</a></li>';
+            $.each(tabStore, function(index, value){
+                if(id === value.id){
+                    content = value.content;
+                    return false; // break
+                }
+            });
+
+            return content;
+        }
+
+        function buildTabs(){
+            for(var i=0, l=tabStore.length; i<l; i++) {
+                addTab(tabStore[i].id);
+            }
+        }
+
+        function buildTabPanels(items){
+            var html = '';
+
+            for(var i=0, l=items.length; i<l; i++) {
+                html = html + '<li><a href="#sectioned-post-'+ items[i].id +'">Section ' + (i + 2) + '</a></li>';
             }
 
-            return out + '</ul>';
         }
 
         function addNewTabBtn(){
@@ -87,16 +119,23 @@ var SECTIONED = (function (module) {
             });
         }
 
-        function addTab(){
-            var $addTabBtn, newTab;
+        function addTab(tabId = null){
+            var $addTabBtn, idPrefix, tabCount;
 
             $addTabBtn = el.tabNav.children('li:last-child').remove();
 
-            tabCount = el.tabNav.find('li').length;
-            newTab = tabCount + 1;
+            tabCount = el.tabNav.find('li').length + 1;
 
-            // add tab nav
-            el.tabs.tabs("add", '#sectioned-post-' + newTab, 'Section '+ newTab)
+            if(!tabId){
+                tabId = tabCount;
+
+                // just to make sure we pick a unique id
+                while($(panelPrefix + tabId).length > 0){
+                    tabId = tabId + 1;
+                }
+            }
+
+            el.tabs.tabs("add", '#' + panelPrefix + tabId, 'Section '+ tabCount);
 
             el.tabNav.append($addTabBtn);
 
@@ -111,15 +150,7 @@ var SECTIONED = (function (module) {
                     'cookie' : encodeURIComponent(document.cookie),
                     post_id : sectionedcontent.post_id
                 },
-                function(tabs){
-
-                    el.tabs.prepend(
-                        buildTabNavs(tabs)
-                    );
-
-                    el.tabNav = $('.nav-tabs'); // cache the nav tabs
-
-                },
+                function(tabs){},
                 'json'
             );
 
