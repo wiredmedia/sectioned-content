@@ -27,9 +27,6 @@ class Plugin {
         // attached to both logged in and non logged in ajax functions
         add_action('wp_ajax_sectioned_get_tabs', array(&$this, 'get_tabs'));
         add_action('wp_ajax_nopriv_sectioned_get_tabs', array(&$this, 'get_tabs'));
-        add_action('wp_ajax_sectioned_get_tab_content', array(&$this, 'get_tab_content'));
-        add_action('wp_ajax_nopriv_sectioned_get_tab_content', array(&$this, 'get_tab_content'));
-
 
         add_action('admin_head', array(&$this, 'js_templates'));
         add_action('save_post', array(&$this, 'save_post'));
@@ -87,12 +84,6 @@ class Plugin {
         echo json_encode($sections);
 
         exit;
-    }
-
-    function get_tab_content(){
-        //$post_id = $_POST['post_id'];
-
-        echo '2';
     }
 
     function js_templates(){

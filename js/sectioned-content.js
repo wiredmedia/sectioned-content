@@ -26,12 +26,11 @@ var SECTIONED = (function (module) {
             $.when(loadTabs())
                 .then(function(tabs){
 
+                    tabStore = tabs;
+
                     initTabs();
 
-                    // have to add the new tab button after the tabs have been initiated
-                    addNewTabBtn();
-
-                    tabStore = tabs;
+                    addNewTabBtn(); // have to be initiated first
 
                     buildTabs()
                 });
@@ -45,6 +44,7 @@ var SECTIONED = (function (module) {
 
             el.tabs = $('#sectioned-content'); // cache the tabs element
 
+            // create the nav tabs
             el.tabs.prepend(
                 '<ul class="nav-tabs"><li><a href="#sectioned-post-1">Section 1</a></li></ul>'
             );
@@ -64,8 +64,7 @@ var SECTIONED = (function (module) {
 
                     //el.tabs.tabs('select', tab); // automatically select tab
 
-                    /* setup the wp-editor
-                    ----------------------------------------------------- */
+                    // setup the wp-editor
                     $(tab).append(
                         wpEditorTemplate({
                             id: "editor-" + ui.panel.id,
@@ -100,15 +99,6 @@ var SECTIONED = (function (module) {
             for(var i=0, l=tabStore.length; i<l; i++) {
                 addTab(tabStore[i].id);
             }
-        }
-
-        function buildTabPanels(items){
-            var html = '';
-
-            for(var i=0, l=items.length; i<l; i++) {
-                html = html + '<li><a href="#sectioned-post-'+ items[i].id +'">Section ' + (i + 2) + '</a></li>';
-            }
-
         }
 
         function addNewTabBtn(){

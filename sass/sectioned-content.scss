@@ -32,11 +32,11 @@ $tab-horz-pad: 15px;
             @include background-image(
                 linear-gradient(center top, #F9F9F9, #F5F5F5)
             );
+            border-color: #DFDFDF #DFDFDF #F5F5F5 #DFDFDF;
         }
 
         &:first-child{
             margin-left: 10px;
-            border-color: #DFDFDF #DFDFDF #F5F5F5 #DFDFDF;
         }
     }
 
