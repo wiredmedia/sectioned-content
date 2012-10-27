@@ -59,3 +59,7 @@ $tab-horz-pad: 15px;
 .wp-editor-container {
     background: white;
 }
+
+#poststuff .postarea{
+    @include box-shadow(none);
+}

@@ -12,14 +12,14 @@ class Post_types {
         register_post_type( "content_section",
             array(
             'labels' => array(
-                    'name'                  => __( 'Post Sections', 'sectionedcontent' ),
-                ),
+                'name'  => __('Post Sections', 'sectionedcontent' ),
+            ),
             'public'                => true,
             'show_ui'               => true,
             'capability_type'       => 'post',
             'publicly_queryable'    => true,
-            'exclude_from_search'   => false,
-            'hierarchical'          => true,
+            'exclude_from_search'   => true,
+            'hierarchical'          => false,
             'query_var'             => true,
             'supports'              => array('editor'),
             'has_archive'           => false,

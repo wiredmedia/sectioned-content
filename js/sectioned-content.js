@@ -30,12 +30,16 @@ var SECTIONED = (function (module) {
 
                     initTabs();
 
-                    addNewTabBtn(); // have to be initiated first
+                    newTabBtn(); // have to be initiated first
 
                     buildTabs()
                 });
 
         };
+
+        function compileHandlebars(){
+            wpEditorTemplate = Handlebars.compile($("#entry-template").html());
+        }
 
         function addTabStructure(){
             // wrap tabs structure around post area
@@ -50,10 +54,6 @@ var SECTIONED = (function (module) {
             );
 
             el.tabNav = $('.nav-tabs'); // cache the nav tabs
-        }
-
-        function compileHandlebars(){
-            wpEditorTemplate = Handlebars.compile($("#entry-template").html());
         }
 
         function initTabs(){
@@ -101,7 +101,7 @@ var SECTIONED = (function (module) {
             }
         }
 
-        function addNewTabBtn(){
+        function newTabBtn(){
             el.tabNav.append('<li><a href="#" id="sectioned-content-new">+</a></li>');
             el.newTab = $('#sectioned-content-new');
             el.tabNav.delegate('#sectioned-content-new', 'click', function(){

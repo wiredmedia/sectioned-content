@@ -75,9 +75,13 @@ class Plugin {
         $sections = json_decode(get_post_meta($post_id, '_post_sections', true));
 
         if(is_array($sections)){
-            foreach($sections as $section){
+            foreach($sections as $key => $section){
                 $post = get_post($section->id);
-                $section->content = $post->post_content;
+                if(is_object($post)){
+                    $section->content = $post->post_content;
+                }else{
+                    unset($sections[$key]);
+                }
             }
         }
 
@@ -115,34 +119,33 @@ class Plugin {
         foreach($_POST as $key => $section_content){
             if(substr($key, 0, 22) == "editor-sectioned-post-"){
 
-                $section_id = substr($key, 22);
+                $section_id = (int) substr($key, 22);
 
-                $section_key = false;
-
-                if(is_object($sections)){
+                $section_exists = false;
+                if(is_array($sections)){
                     foreach($sections as $key => $value){
                         if($value->id === $section_id){
-                            $section_key = $key;
+                            $section_exists = true;
+                            unset($sections[$key]);
                             break;
                         }
                     }
                 }
 
                 //check if in sections array
-                if($section_key){
+                if($section_exists){
                     // update the post
                     wp_update_post(array(
                         'ID' => $section_id,
                         'post_content' => $section_content
                     ));
-                    // unset it from the sections array
-                    unset($sections->{$section_key});
                 }else{
                     // create a new post
                     $section_id = wp_insert_post(array(
                         'post_content' => $section_content,
                         'post_type' => 'content_section',
-                        'post_title' => 'Content section'
+                        'post_title' => 'Section for - '. $post_id,
+                        'post_status' => 'publish'
                     ));
                 }
 
@@ -155,8 +158,9 @@ class Plugin {
         // now check for deleted sections
         // if any values left in $sections array, they all need deleting
         if(!empty($sections)){
-            foreach($sections as $section_id){
-                //wp_delete_post($section_id, true);
+            foreach($sections as $key => $value){
+                wp_delete_post($value->id, true);
+                unset($sections[$key]);
             }
         }
 
