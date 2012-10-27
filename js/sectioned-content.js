@@ -17,27 +17,33 @@ var SECTIONED = (function (module) {
         function init(){
             var tabs;
 
-            // compile handlebars templates
-            wpEditorTemplate = Handlebars.compile($("#entry-template").html());
+            compileHandlebars();
 
+            addTabStructure();
+
+            $.when(loadTabs())
+                .then(function(tabs){
+                    initTabs();
+
+                    // have to add the new tab button after the tabs have been setup
+                    addNewTabBtn();
+                });
+
+        };
+
+        function addTabStructure(){
             // wrap tabs structure around post area
             $('#postdivrich')
                 .wrap('<div id="sectioned-content" class="sectioned-content"><div id="sectioned-post-1" class="tab-content"></div></div>');
 
             el.tabs = $('#sectioned-content'); // cache the tabs element
+        }
 
+        function compileHandlebars(){
+            wpEditorTemplate = Handlebars.compile($("#entry-template").html());
+        }
 
-            // add tabs
-            tabs = [
-                {title: 'Section 1'}
-            ];
-
-            el.tabs.prepend(
-                buildTabNavs(tabs)
-            );
-
-            el.tabNav = $('.nav-tabs'); // cache the nav tabs
-
+        function initTabs(){
             //initiate tabs
             el.tabs.tabs({
                 add: function(event, ui) {
@@ -49,27 +55,25 @@ var SECTIONED = (function (module) {
                     ----------------------------------------------------- */
                     $(tab).append(
                         wpEditorTemplate({
-                            id: "sectioned-editor-" + ui.panel.id,
-                            post_id: sectionedcontent.postId // outputed using wp_localize_script()
+                            id: "editor-" + ui.panel.id,
+                            post_id: sectionedcontent.postId, // outputed using wp_localize_script()
+                            admin_url: userSettings.url
                         })
                     );
 
-                    tinyMCE.execCommand('mceAddControl', false, 'sectioned-editor-' + ui.panel.id);
+                    tinyMCE.execCommand('mceAddControl', false, 'editor-' + ui.panel.id);
 
                 }
             });
-
-            /*
-             * have to add the new tab button after the tabs have been setup
-             */
-            addNewTabBtn();
-
-        };
+        }
 
         function buildTabNavs(items){
             var out = '<ul class="nav-tabs">';
-            for(var i=0, l=items.length; i<l; i++) {
-                out = out + '<li><a href="#sectioned-post-'+ (i + 1) +'">' + items[i].title + '</a></li>';
+
+            out = out + '<li><a href="#sectioned-post-1">Section 1</a></li>';
+
+            for(var i=2, l=items.length; i<l+2; i++) {
+                out = out + '<li><a href="#sectioned-post-'+ i +'">Section ' + i + '</a></li>';
             }
 
             return out + '</ul>';
@@ -95,6 +99,29 @@ var SECTIONED = (function (module) {
             el.tabs.tabs("add", '#sectioned-post-' + newTab, 'Section '+ newTab)
 
             el.tabNav.append($addTabBtn);
+
+        }
+
+        function loadTabs(){
+
+            return $.post(
+                ajaxurl, // declared by wp admin
+                {
+                    action:"sectioned_get_tabs",
+                    'cookie' : encodeURIComponent(document.cookie),
+                    post_id : sectionedcontent.post_id
+                },
+                function(tabs){
+
+                    el.tabs.prepend(
+                        buildTabNavs(tabs)
+                    );
+
+                    el.tabNav = $('.nav-tabs'); // cache the nav tabs
+
+                },
+                'json'
+            );
 
         }
 
