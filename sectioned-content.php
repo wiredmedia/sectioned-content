@@ -22,6 +22,11 @@ class Plugin {
         add_action('admin_init', array(&$this, 'check_php_version'));
         add_action('init', array(&$this, 'upgrade_plugin'));
         add_action('admin_enqueue_scripts', array(&$this, 'css_and_js'));
+
+        // attached it to both logged in and non logged in ajax functions
+        add_action('wp_ajax_sectioned_get_post_id', array(&$this, 'get_post_id'));
+        add_action('wp_ajax_nopriv_sectioned_get_post_id', array(&$this, 'get_post_id'));
+        add_action('admin_head', array(&$this, 'js_templates'));
     }
 
     public function upgrade_plugin(){
@@ -44,6 +49,8 @@ class Plugin {
     }
 
     function css_and_js($hook){
+        global $post;
+
         if( $hook != 'post.php' && $hook != 'post-new.php' ){
             return;
         }
@@ -52,7 +59,25 @@ class Plugin {
         wp_enqueue_style( 'sectionedcontent' );
 
         wp_register_script('sectionedcontent', plugins_url('js/sectioned-content.js', __FILE__), array('jquery', 'jquery-ui-tabs'), '', true);
+        wp_register_script('handlesbars', plugins_url('js/handlebars-1.0.rc.1.js', __FILE__), array('sectionedcontent'), '', true);
         wp_enqueue_script('sectionedcontent');
+        wp_enqueue_script('handlesbars');
+
+        wp_localize_script('sectionedcontent', 'sectionedcontent', array('postId' => $post->ID));
+    }
+
+    function get_post_id(){
+        //global $post;
+        //var_dump(get_the_ID());
+        //echo json_encode(array('ID' => 2));
+
+        exit;
+    }
+
+    function js_templates(){
+        echo '<script id="entry-template" type="text/x-handlebars-template">';
+            require 'js/templates/wp-editor.html';
+        echo '</script>';
     }
 
 }

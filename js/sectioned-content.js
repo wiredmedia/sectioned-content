@@ -10,19 +10,21 @@ var SECTIONED = (function (module) {
     module.sectionedContent = function($){
 
         var el = {};
+        var wpEditorTemplate;
 
         init();
 
         function init(){
             var tabs;
 
-            el.postArea = $('#postdivrich');
+            // compile handlebars templates
+            wpEditorTemplate = Handlebars.compile($("#entry-template").html());
 
             // wrap tabs structure around post area
-            el.postArea
+            $('#postdivrich')
                 .wrap('<div id="sectioned-content" class="sectioned-content"><div id="sectioned-post-1" class="tab-content"></div></div>');
 
-            el.tabs = $('#sectioned-content');
+            el.tabs = $('#sectioned-content'); // cache the tabs element
 
 
             // add tabs
@@ -34,17 +36,32 @@ var SECTIONED = (function (module) {
                 buildTabNavs(tabs)
             );
 
-            el.tabNav = $('.nav-tabs');
+            el.tabNav = $('.nav-tabs'); // cache the nav tabs
 
             //initiate tabs
             el.tabs.tabs({
                 add: function(event, ui) {
                     var tab = '#' + ui.panel.id;
-                    el.tabs.tabs('select', tab);
-                    $(tab).append('<p>test</p>');
+
+                    el.tabs.tabs('select', tab); // automatically select tab
+
+                    /* get the current post id, then setup the wp-editor
+                    ----------------------------------------------------- */
+                    $(tab).append(
+                        wpEditorTemplate({
+                            id: "sectioned-editor-" + ui.panel.id,
+                            post_id: sectionedcontent.postId // outputed using wp_localize_script()
+                        })
+                    );
+
+                    tinyMCE.execCommand('mceAddControl', false, 'sectioned-editor-' + ui.panel.id);
+
                 }
             });
 
+            /*
+             * have to add the new tab button after the tabs have been setup
+             */
             addNewTabBtn();
 
         };

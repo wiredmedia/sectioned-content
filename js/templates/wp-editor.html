@@ -1,0 +1,15 @@
+<div id="wp-{{id}}-wrap" class="wp-editor-wrap tmce-active">
+
+    <div id="wp-{{id}}-editor-tools" class="wp-editor-tools">
+        <a id="{{id}}-html" class="hide-if-no-js wp-switch-editor switch-html" onclick="switchEditors.switchto(this);">HTML</a>
+        <a id="{{id}}-tmce" class="hide-if-no-js wp-switch-editor switch-tmce" onclick="switchEditors.switchto(this);">Visual</a>
+        <div id="wp-{{id}}-media-buttons" class="hide-if-no-js wp-media-buttons">
+            <a href="http://startupstarthere.carl.dev.wiredmedia.co.uk/wordpress/wp-admin/media-upload.php?post_id={{post_id}}TB_iframe=1" class="thickbox add_media" id="{{id}}-add_media" title="Add Media" onclick="return false;">Upload/Insert <img src="http://startupstarthere.carl.dev.wiredmedia.co.uk/wordpress/wp-admin/images/media-button.png?ver=20111005" width="15" height="15" /></a>
+        </div>
+    </div>
+
+    <div id="wp-{{id}}-editor-container" class="wp-editor-container">
+        <textarea class="wp-editor-area" rows="20" cols="40" name="{{id}}" id="{{id}}"></textarea>
+    </div>
+
+</div>
