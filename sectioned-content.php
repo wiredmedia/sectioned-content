@@ -21,7 +21,7 @@ class Plugin {
     public function __construct() {
         add_action('admin_init', array(&$this, 'check_php_version'));
         add_action('init', array(&$this, 'upgrade_plugin'));
-        add_action('admin_enqueue_scripts', array(&$this, 'the_js'));
+        add_action('admin_enqueue_scripts', array(&$this, 'css_and_js'));
     }
 
     public function upgrade_plugin(){
@@ -43,10 +43,13 @@ class Plugin {
         }
     }
 
-    function the_js($hook){
+    function css_and_js($hook){
         if( $hook != 'post.php' && $hook != 'post-new.php' ){
             return;
         }
+
+        wp_register_style( 'sectionedcontent', plugins_url('css/sectioned-content.css', __FILE__) );
+        wp_enqueue_style( 'sectionedcontent' );
 
         wp_register_script('sectionedcontent', plugins_url('js/sectioned-content.js', __FILE__), array('jquery', 'jquery-ui-tabs'), '', true);
         wp_enqueue_script('sectionedcontent');

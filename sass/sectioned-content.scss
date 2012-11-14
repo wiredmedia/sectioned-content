@@ -1,3 +1,61 @@
-.test{
-    font-size: 'yup';
+/* provides the mixins
+------------------------------- */
+@import "compass";
+
+
+/* variables
+------------------------------- */
+$font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+$tab-vert-pad: 7px;
+$tab-horz-pad: 15px;
+
+/* Main styles
+------------------------------- */
+.nav-tabs {
+
+    li{
+        float: left;
+        padding: $tab-vert-pad $tab-horz-pad;
+        font-family: $font-family;
+        @include background-image(
+            linear-gradient(center top, #F9F9F9, #ECECEC)
+        );
+        @include border-radius(3px);
+        border: 1px solid #DFDFDF;
+        border-bottom: none;
+        font-size: 15px;
+        margin: 0 0 0 2px;
+
+        &.ui-state-active{
+            @include background-image(
+                linear-gradient(center top, #F9F9F9, #F5F5F5)
+            );
+        }
+
+        &:first-child{
+            margin-left: 10px;
+        }
+
+        &:last-child{
+
+        }
+    }
+
+    a{
+        display: block;
+        color: #464646;
+        text-decoration: none;
+    }
+}
+
+.tab-content {
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #F5F5F5;
+    border: 1px solid #DFDFDF;
+    @include border-radius(3px);
+}
+
+.wp-editor-container {
+    background: white;
 }
