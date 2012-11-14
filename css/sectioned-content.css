@@ -4,6 +4,10 @@
 ------------------------------- */
 /* Main styles
 ------------------------------- */
+.nav-tabs {
+  position: relative;
+  bottom: -1px;
+}
 .nav-tabs li {
   float: left;
   padding: 7px 15px;
@@ -19,7 +23,6 @@
   -o-border-radius: 3px;
   border-radius: 3px;
   border: 1px solid #DFDFDF;
-  border-bottom: none;
   font-size: 15px;
   margin: 0 0 0 2px;
 }
@@ -32,6 +35,7 @@
 }
 .nav-tabs li:first-child {
   margin-left: 10px;
+  border-color: #DFDFDF #DFDFDF #F5F5F5 #DFDFDF;
 }
 .nav-tabs a {
   display: block;

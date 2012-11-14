@@ -13,6 +13,9 @@ $tab-horz-pad: 15px;
 ------------------------------- */
 .nav-tabs {
 
+    position: relative;
+    bottom: -1px;
+
     li{
         float: left;
         padding: $tab-vert-pad $tab-horz-pad;
@@ -22,7 +25,6 @@ $tab-horz-pad: 15px;
         );
         @include border-radius(3px);
         border: 1px solid #DFDFDF;
-        border-bottom: none;
         font-size: 15px;
         margin: 0 0 0 2px;
 
@@ -34,10 +36,7 @@ $tab-horz-pad: 15px;
 
         &:first-child{
             margin-left: 10px;
-        }
-
-        &:last-child{
-
+            border-color: #DFDFDF #DFDFDF #F5F5F5 #DFDFDF;
         }
     }
 
