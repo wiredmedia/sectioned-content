@@ -34,20 +34,51 @@ var SECTIONED = (function (module) {
                 buildTabNavs(tabs)
             );
 
+            el.tabNav = $('.nav-tabs');
+
             //initiate tabs
-            $( "#sectioned-content" ).tabs();
+            el.tabs.tabs({
+                add: function(event, ui) {
+                    var tab = '#' + ui.panel.id;
+                    el.tabs.tabs('select', tab);
+                    $(tab).append('<p>test</p>');
+                }
+            });
+
+            addNewTabBtn();
 
         };
 
         function buildTabNavs(items){
             var out = '<ul class="nav-tabs">';
             for(var i=0, l=items.length; i<l; i++) {
-                out = out + '<li><a href="#sectioned-post-'+ i +'">' + items[i].title + '</a></li>';
+                out = out + '<li><a href="#sectioned-post-'+ (i + 1) +'">' + items[i].title + '</a></li>';
             }
 
-            out = out + '<li><a href="#">+</a></li>';
-
             return out + '</ul>';
+        }
+
+        function addNewTabBtn(){
+            el.tabNav.append('<li><a href="#" id="sectioned-content-new">+</a></li>');
+            el.newTab = $('#sectioned-content-new');
+            el.tabNav.delegate('#sectioned-content-new', 'click', function(){
+                addTab();
+            });
+        }
+
+        function addTab(){
+            var $addTabBtn, newTab;
+
+            $addTabBtn = el.tabNav.children('li:last-child').remove();
+
+            tabCount = el.tabNav.find('li').length;
+            newTab = tabCount + 1;
+
+            // add tab nav
+            el.tabs.tabs("add", '#sectioned-post-' + newTab, 'Section '+ newTab)
+
+            el.tabNav.append($addTabBtn);
+
         }
 
     };

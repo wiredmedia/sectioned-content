@@ -47,7 +47,8 @@ $tab-horz-pad: 15px;
     }
 }
 
-.tab-content {
+.tab-content,
+.ui-tabs-panel {
     padding: 10px;
     margin-bottom: 20px;
     background-color: #F5F5F5;

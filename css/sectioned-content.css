@@ -43,7 +43,8 @@
   text-decoration: none;
 }
 
-.tab-content {
+.tab-content,
+.ui-tabs-panel {
   padding: 10px;
   margin-bottom: 20px;
   background-color: #F5F5F5;
