@@ -9,10 +9,16 @@ var SECTIONED = (function (module) {
 
     module.sectionedContent = function($){
 
-        var el = {};
-        var wpEditorTemplate;
-        var panelPrefix = 'sectioned-post-';
-        var tabStore;
+        var wpEditorTemplate,
+            panelPrefix = 'sectioned-post-',
+            tabStore;
+
+        // jquery element cache
+        var el = {
+            tabs: '',
+            tabNav: '',
+            newTab: ''
+        };
 
         init();
 
@@ -32,7 +38,9 @@ var SECTIONED = (function (module) {
 
                     newTabBtn(); // have to be initiated first
 
-                    buildTabs()
+                    buildTabs();
+
+                    closeBtns();
                 });
 
         };
@@ -50,7 +58,7 @@ var SECTIONED = (function (module) {
 
             // create the nav tabs
             el.tabs.prepend(
-                '<ul class="nav-tabs"><li><a href="#sectioned-post-1">Section 1</a></li></ul>'
+                '<ul class="nav-tabs"><li><a href="#sectioned-post-1">Section</a></li></ul>'
             );
 
             el.tabNav = $('.nav-tabs'); // cache the nav tabs
@@ -60,9 +68,13 @@ var SECTIONED = (function (module) {
             //initiate tabs
             el.tabs.tabs({
                 add: function(event, ui) {
+
                     var tab = '#' + ui.panel.id;
 
                     //el.tabs.tabs('select', tab); // automatically select tab
+
+                    // add close btn
+                    $(ui.tab).parent().prepend('<span class="icon close">x</span>');
 
                     // setup the wp-editor
                     $(tab).append(
@@ -95,6 +107,19 @@ var SECTIONED = (function (module) {
             return content;
         }
 
+        function removeTabContent(panelId){
+            var id;
+
+            id = parseInt(panelId.replace('#' + panelPrefix, ''));
+
+            $.each(tabStore, function(index, value){
+                if(id === value.id){
+                    tabStore.splice(index);
+                    return false; // break
+                }
+            });
+        }
+
         function buildTabs(){
             for(var i=0, l=tabStore.length; i<l; i++) {
                 addTab(tabStore[i].id);
@@ -104,8 +129,9 @@ var SECTIONED = (function (module) {
         function newTabBtn(){
             el.tabNav.append('<li><a href="#" id="sectioned-content-new">+</a></li>');
             el.newTab = $('#sectioned-content-new');
-            el.tabNav.delegate('#sectioned-content-new', 'click', function(){
+            el.tabNav.delegate('#sectioned-content-new', 'click', function(e){
                 addTab();
+                e.preventDefault();
             });
         }
 
@@ -120,12 +146,12 @@ var SECTIONED = (function (module) {
                 tabId = tabCount;
 
                 // just to make sure we pick a unique id
-                while($(panelPrefix + tabId).length > 0){
+                while($('#' + panelPrefix + tabId).length > 0){
                     tabId = tabId + 1;
                 }
             }
 
-            el.tabs.tabs("add", '#' + panelPrefix + tabId, 'Section '+ tabCount);
+            el.tabs.tabs("add", '#' + panelPrefix + tabId, 'Section');
 
             el.tabNav.append($addTabBtn);
 
@@ -144,6 +170,23 @@ var SECTIONED = (function (module) {
                 'json'
             );
 
+        }
+
+        function closeBtns(){
+            el.tabNav.delegate('.close', 'click', function(){
+                var $addTabBtn, href;
+
+                href = $(this).parent().find('a').attr('href');
+
+                removeTabContent(href); // remove it from the tabStore
+
+                $addTabBtn = el.tabNav.children('li:last-child').remove();
+
+                el.tabs.tabs('remove', href);
+
+                el.tabNav.append($addTabBtn);
+
+            });
         }
 
     };
