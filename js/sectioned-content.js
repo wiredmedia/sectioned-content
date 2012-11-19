@@ -151,7 +151,7 @@ var SECTIONED = (function (module) {
                 }
             }
 
-            el.tabs.tabs("add", '#' + panelPrefix + tabId, 'Section '+ tabId);
+            el.tabs.tabs("add", '#' + panelPrefix + tabId, 'Section');
 
             el.tabNav.append($addTabBtn);
 
