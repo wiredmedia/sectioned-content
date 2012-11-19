@@ -132,7 +132,6 @@ class Plugin {
         }
 
         $sections = json_decode(get_post_meta($post_id, '_post_sections', true));
-
         $updated_sections = array();
 
         foreach($_POST as $key => $section_content){
@@ -151,12 +150,19 @@ class Plugin {
                     }
                 }
 
+                /*
+                 * make sure the menu order is correct,
+                 * when the sections are outputed we arte using order=ASC
+                 */
+                $menu_order = count($updated_sections) + 1;
+
                 //check if in sections array
                 if($section_exists){
                     // update the post
                     wp_update_post(array(
                         'ID' => $section_id,
-                        'post_content' => $section_content
+                        'post_content' => $section_content,
+                        'menu_order' => $menu_order
                     ));
                 }else{
                     // create a new post
@@ -164,7 +170,8 @@ class Plugin {
                         'post_content' => $section_content,
                         'post_type' => 'content_section',
                         'post_title' => 'Section for - '. $post_id,
-                        'post_status' => 'publish'
+                        'post_status' => 'publish',
+                        'menu_order' => $menu_order
                     ));
                 }
 
@@ -190,7 +197,7 @@ class Plugin {
             }
         }
 
-        // finally save post meta
+        // save post meta
         update_post_meta($post_id, '_post_sections', json_encode($updated_sections));
 
     }

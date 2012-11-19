@@ -16,7 +16,7 @@ function get_sections($post_id){
         $args = array(
             'post_type' => 'content_section',
             'orderby' => 'menu_order',
-            'order' => 'DESC',
+            'order' => 'ASC',
             'include' => $section_ids,
             'numberposts' => -1
         );
