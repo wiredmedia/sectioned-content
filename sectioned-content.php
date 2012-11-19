@@ -83,6 +83,8 @@ class Plugin {
                     unset($sections[$key]);
                 }
             }
+        }else{
+            $sections = array();
         }
 
         echo json_encode($sections);
