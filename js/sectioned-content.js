@@ -87,7 +87,6 @@ var SECTIONED = (function (module) {
                     );
 
                     tinyMCE.execCommand('mceAddControl', false, 'editor-' + ui.panel.id);
-
                 }
             });
         }

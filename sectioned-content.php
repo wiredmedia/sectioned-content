@@ -28,6 +28,8 @@ class Plugin {
         add_action('wp_ajax_sectioned_get_tabs', array(&$this, 'get_tabs'));
         add_action('wp_ajax_nopriv_sectioned_get_tabs', array(&$this, 'get_tabs'));
 
+        add_filter('tiny_mce_before_init', array(&$this, 'config_mce'), 1111);
+
         add_action('admin_head', array(&$this, 'js_templates'));
         add_action('save_post', array(&$this, 'save_post'));
     }
@@ -169,6 +171,15 @@ class Plugin {
         // finally save post meta
         update_post_meta($post_id, '_post_sections', json_encode($updated_sections));
 
+    }
+
+    function config_mce($a) {
+
+        $options = array(
+            'height' => 463
+        );
+
+        return array_merge($a, $options);
     }
 
 }
