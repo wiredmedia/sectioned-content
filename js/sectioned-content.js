@@ -10,6 +10,8 @@ var SECTIONED = (function (module) {
     module.sectionedContent = function($){
 
         var wpEditorTemplate,
+            fieldTemplate,
+            newFieldTemplate,
             panelPrefix = 'sectioned-post-',
             tabStore;
 
@@ -47,6 +49,8 @@ var SECTIONED = (function (module) {
 
         function compileHandlebars(){
             wpEditorTemplate = Handlebars.compile($("#entry-template").html());
+            fieldTemplate = Handlebars.compile($("#field-template").html());
+            newFieldTemplate = Handlebars.compile($("#new-field-template").html());
         }
 
         function addTabStructure(){
@@ -70,6 +74,10 @@ var SECTIONED = (function (module) {
                 add: function(event, ui) {
 
                     var tab = '#' + ui.panel.id;
+                    var $tab = $(tab);
+                    var fields;
+                    var $fieldContainer;
+                    var id = parseInt(ui.panel.id.replace(panelPrefix, ''));
 
                     //el.tabs.tabs('select', tab); // automatically select tab
 
@@ -77,7 +85,7 @@ var SECTIONED = (function (module) {
                     $(ui.tab).parent().prepend('<span class="icon close">x</span>');
 
                     // setup the wp-editor
-                    $(tab).append(
+                    $tab.append(
                         wpEditorTemplate({
                             id: "editor-" + ui.panel.id,
                             post_id: sectionedcontent.postId, // outputed using wp_localize_script()
@@ -87,12 +95,63 @@ var SECTIONED = (function (module) {
                     );
 
                     tinyMCE.execCommand('mceAddControl', false, 'editor-' + ui.panel.id);
+
+                    fields = getCustomFields(ui.panel.id);
+                    $tab.append('<div class="section-fields"><h2>Options</h2>');
+
+                    $tab.find('.section-fields').append(newFieldTemplate({
+                        id: id
+                    }));
+
+                    $tab.find('.section-fields .new-field a').click(function(){
+                        addCustomField($(this));
+                    });
+
+                    if(fields){
+                        fields = getCustomFields(ui.panel.id);
+                        $.each(fields, function(index, value){
+                            $tab.find('.section-fields').append(
+                                fieldTemplate({
+                                    name: index,
+                                    label: index.replace(/_section_[0-9]*_/, ''),
+                                    value: value
+                                })
+                            );
+                        });
+                    }
+
+                },
+
+                select: function(event, ui){
+                    var tab = '#' + ui.panel.id;
+                    // disable all sections custom fields
+                    $('.section-fields').find('input').attr('disabled', 'disabled');
+                    // enable this tabs fields
+                    $(tab).find('input').removeAttr("disabled");
                 }
+
             });
         }
 
+        function addCustomField($elem){
+            var id;
+
+            id = $elem.attr('data-section');
+
+            $elem.parents('.section-fields').append(
+                fieldTemplate({
+                    name: '_section_'+ id + '_'+ $elem.parent().find('.new-name').val(),
+                    label: $elem.parent().find('.new-name').val(),
+                    value: $elem.parent().find('.new-value').val()
+                })
+            );
+
+            $elem.parent().find('.new-name').val('');
+            $elem.parent().find('.new-value').val('');
+        }
+
         function getTabContent(panelId){
-            var id, content
+            var id, content;
 
             id = parseInt(panelId.replace(panelPrefix, ''));
 
@@ -104,6 +163,25 @@ var SECTIONED = (function (module) {
             });
 
             return content;
+        }
+
+        function getCustomFields(panelId){
+            var id, fields;
+
+            id = parseInt(panelId.replace(panelPrefix, ''));
+
+            $.each(tabStore, function(index, value){
+                if(id === value.id){
+                    fields = value.fields;
+                    return false; // break
+                }
+            });
+
+            if(fields){
+                return fields;
+            }else{
+                return false;
+            }
         }
 
         function removeTabContent(panelId){

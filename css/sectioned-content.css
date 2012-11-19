@@ -2,6 +2,19 @@
 ------------------------------- */
 /* variables
 ------------------------------- */
+/* helpers
+------------------------------- */
+.section-fields, .section-fields .control-group {
+  *zoom: 1;
+}
+.section-fields:before, .section-fields .control-group:before, .section-fields:after, .section-fields .control-group:after {
+  content: "";
+  display: table;
+}
+.section-fields:after, .section-fields .control-group:after {
+  clear: both;
+}
+
 /* Main styles
 ------------------------------- */
 .nav-tabs {
@@ -82,6 +95,25 @@
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   border-radius: 3px;
+}
+
+.section-fields h2 {
+  border-bottom: 1px solid #dfdfdf;
+  padding-bottom: 3px;
+}
+.section-fields .control-group {
+  border: 1px solid #DFDFDF;
+  padding: 5px;
+  background: white;
+  display: inline-block;
+  float: left;
+  margin-left: 10px;
+}
+.section-fields label {
+  font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif;
+  font-size: 15px;
+  padding: 5px;
+  display: block;
 }
 
 .wp-editor-container {

@@ -80,7 +80,14 @@ class Plugin {
             foreach($sections as $key => $section){
                 $post = get_post($section->id);
                 if(is_object($post)){
-                    $section->content = $post->post_content;
+                    $section->content = wpautop($post->post_content);
+                    $fields = get_post_meta($post->ID);
+
+                    foreach($fields as $key => $value){
+                        if (strstr($key, '_section_')){
+                            $section->fields->{$key} = $value;
+                        }
+                    }
                 }else{
                     unset($sections[$key]);
                 }
@@ -97,6 +104,14 @@ class Plugin {
     function js_templates(){
         echo '<script id="entry-template" type="text/x-handlebars-template">';
             require 'js/templates/wp-editor.html';
+        echo '</script>';
+
+        echo '<script id="field-template" type="text/x-handlebars-template">';
+            require 'js/templates/field-group.html';
+        echo '</script>';
+
+        echo '<script id="new-field-template" type="text/x-handlebars-template">';
+            require 'js/templates/new-field.html';
         echo '</script>';
     }
 
@@ -151,6 +166,13 @@ class Plugin {
                         'post_title' => 'Section for - '. $post_id,
                         'post_status' => 'publish'
                     ));
+                }
+
+                // save custom fields
+                foreach($_POST as $key => $value){
+                    if(strstr($key, '_section_') && strstr($key, '_'. $section_id .'_')){
+                        update_post_meta($section_id, $key, $value);
+                    }
                 }
 
                 // add it to the updated_sections
