@@ -151,7 +151,7 @@ var SECTIONED = (function (module) {
                 }
             }
 
-            el.tabs.tabs("add", '#' + panelPrefix + tabId, 'Section');
+            el.tabs.tabs("add", '#' + panelPrefix + tabId, 'Section '+ tabId);
 
             el.tabNav.append($addTabBtn);
 
@@ -179,6 +179,10 @@ var SECTIONED = (function (module) {
                 href = $(this).parent().find('a').attr('href');
 
                 removeTabContent(href); // remove it from the tabStore
+
+                /* have to remove tinymce editor to free up the textarea id
+                this is the case even after the textarea has been removed from the dom */
+                tinymce.execCommand('mceRemoveControl', false, href.replace('#', 'editor-'));
 
                 $addTabBtn = el.tabNav.children('li:last-child').remove();
 
