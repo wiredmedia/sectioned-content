@@ -4,24 +4,28 @@
 ------------------------------- */
 /* helpers
 ------------------------------- */
-.section-fields, .section-fields .control-group {
+.sectioned-content .section-fields, .sectioned-content .section-fields .control-group {
   *zoom: 1;
 }
-.section-fields:before, .section-fields .control-group:before, .section-fields:after, .section-fields .control-group:after {
+.sectioned-content .section-fields:before, .sectioned-content .section-fields .control-group:before, .sectioned-content .section-fields:after, .sectioned-content .section-fields .control-group:after {
   content: "";
   display: table;
 }
-.section-fields:after, .section-fields .control-group:after {
+.sectioned-content .section-fields:after, .sectioned-content .section-fields .control-group:after {
   clear: both;
 }
 
 /* Main styles
 ------------------------------- */
-.nav-tabs {
+.sectioned-content {
+  background: none !important;
+  border: none !important;
+}
+.sectioned-content .nav-tabs {
   position: relative;
   bottom: -1px;
 }
-.nav-tabs li {
+.sectioned-content .nav-tabs li {
   position: relative;
   float: left;
   padding: 7px 15px;
@@ -41,7 +45,7 @@
   font-size: 15px;
   margin: 0 0 0 2px;
 }
-.nav-tabs li.ui-state-active {
+.sectioned-content .nav-tabs li.ui-state-active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f9f9f9), color-stop(100%, #f5f5f5));
   background-image: -webkit-linear-gradient(center top, #f9f9f9, #f5f5f5);
   background-image: -moz-linear-gradient(center top, #f9f9f9, #f5f5f5);
@@ -49,18 +53,18 @@
   background-image: linear-gradient(center top, #f9f9f9, #f5f5f5);
   border-color: #DFDFDF #DFDFDF #F5F5F5 #DFDFDF;
 }
-.nav-tabs li:first-child {
+.sectioned-content .nav-tabs li:first-child {
   margin-left: 10px;
 }
-.nav-tabs li:last-child {
+.sectioned-content .nav-tabs li:last-child {
   padding: 7px 15px;
 }
-.nav-tabs a {
+.sectioned-content .nav-tabs a {
   display: block;
   color: #464646;
   text-decoration: none;
 }
-.nav-tabs .close {
+.sectioned-content .nav-tabs .close {
   cursor: pointer;
   width: 7px;
   height: 7px;
@@ -79,13 +83,12 @@
   -o-border-radius: 5px;
   border-radius: 5px;
 }
-.nav-tabs .close:focus, .nav-tabs .close:hover {
+.sectioned-content .nav-tabs .close:focus, .sectioned-content .nav-tabs .close:hover {
   background: #b5b5b5;
   color: #f2f2f2;
 }
-
-.tab-content,
-.ui-tabs-panel {
+.sectioned-content .tab-content,
+.sectioned-content .ui-tabs-panel {
   padding: 10px;
   margin-bottom: 20px;
   background-color: #F5F5F5;
@@ -96,12 +99,11 @@
   -o-border-radius: 3px;
   border-radius: 3px;
 }
-
-.section-fields h2 {
+.sectioned-content .section-fields h2 {
   border-bottom: 1px solid #dfdfdf;
   padding-bottom: 3px;
 }
-.section-fields .control-group {
+.sectioned-content .section-fields .control-group {
   border: 1px solid #DFDFDF;
   padding: 5px;
   background: white;
@@ -109,7 +111,7 @@
   float: left;
   margin-left: 10px;
 }
-.section-fields label {
+.sectioned-content .section-fields label {
   font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif;
   font-size: 15px;
   padding: 5px;

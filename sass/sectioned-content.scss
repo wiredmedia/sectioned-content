@@ -26,108 +26,115 @@ $tab-horz-pad: 15px;
 
 /* Main styles
 ------------------------------- */
-.nav-tabs {
+.sectioned-content{
 
-    position: relative;
-    bottom: -1px;
+    background: none !important;
+    border: none !important;
 
-    li{
+    .nav-tabs {
+
         position: relative;
-        float: left;
-        padding: $tab-vert-pad $tab-horz-pad;
-        padding-right: $tab-horz-pad + 12px;
-        font-family: $font-family;
-        @include background-image(
-            linear-gradient(center top, #F9F9F9, #ECECEC)
-        );
-        @include border-radius(3px);
-        border: 1px solid #DFDFDF;
-        font-size: 15px;
-        margin: 0 0 0 2px;
+        bottom: -1px;
 
-        &.ui-state-active{
+        li{
+            position: relative;
+            float: left;
+            padding: $tab-vert-pad $tab-horz-pad;
+            padding-right: $tab-horz-pad + 12px;
+            font-family: $font-family;
             @include background-image(
-                linear-gradient(center top, #F9F9F9, #F5F5F5)
+                linear-gradient(center top, #F9F9F9, #ECECEC)
             );
-            border-color: #DFDFDF #DFDFDF #F5F5F5 #DFDFDF;
+            @include border-radius(3px);
+            border: 1px solid #DFDFDF;
+            font-size: 15px;
+            margin: 0 0 0 2px;
+
+            &.ui-state-active{
+                @include background-image(
+                    linear-gradient(center top, #F9F9F9, #F5F5F5)
+                );
+                border-color: #DFDFDF #DFDFDF #F5F5F5 #DFDFDF;
+            }
+
+            &:first-child{
+                margin-left: 10px;
+            }
+
+            &:last-child{
+                padding: $tab-vert-pad $tab-horz-pad;
+            }
         }
 
-        &:first-child{
+        a{
+            display: block;
+            color: #464646;
+            text-decoration: none;
+        }
+
+        .close{
+            cursor: pointer;
+            width: 7px;
+            height: 7px;
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            font-family: Helvetica, Arial, Verdana;
+            color: darken(#F5F5F5, 40);
+            font-size: 13px;
+            text-shadow: 0px 1px 0px rgba(255,255,255,.5);
+            padding: 4px;
+            line-height: 6px;
+            @include border-radius(5px);
+
+            &:focus,
+            &:hover{
+                background: darken(#F5F5F5, 25);
+                color: darken(white, 5);
+            }
+        }
+    }
+
+    .tab-content,
+    .ui-tabs-panel {
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: #F5F5F5;
+        border: 1px solid #DFDFDF;
+        @include border-radius(3px);
+    }
+
+
+    .section-fields{
+        @extend %clearfix;
+
+        h2{
+            border-bottom: 1px solid lighten(#464646, 60);
+            padding-bottom: 3px;
+        }
+
+        .control-group{
+            @extend %clearfix;
+            border: 1px solid #DFDFDF;
+            padding: 5px;
+            background: white;
+            display: inline-block;
+            float: left;
             margin-left: 10px;
         }
 
-        &:last-child{
-            padding: $tab-vert-pad $tab-horz-pad;
+        label{
+            font-family: $font-family;
+            font-size: 15px;
+            padding: 5px;
+            display: block;
+        }
+
+        .controls{
+
         }
     }
 
-    a{
-        display: block;
-        color: #464646;
-        text-decoration: none;
-    }
-
-    .close{
-        cursor: pointer;
-        width: 7px;
-        height: 7px;
-        position: absolute;
-        top: 2px;
-        right: 2px;
-        font-family: Helvetica, Arial, Verdana;
-        color: darken(#F5F5F5, 40);
-        font-size: 13px;
-        text-shadow: 0px 1px 0px rgba(255,255,255,.5);
-        padding: 4px;
-        line-height: 6px;
-        @include border-radius(5px);
-
-        &:focus,
-        &:hover{
-            background: darken(#F5F5F5, 25);
-            color: darken(white, 5);
-        }
-    }
-}
-
-.tab-content,
-.ui-tabs-panel {
-    padding: 10px;
-    margin-bottom: 20px;
-    background-color: #F5F5F5;
-    border: 1px solid #DFDFDF;
-    @include border-radius(3px);
-}
-
-
-.section-fields{
-    @extend %clearfix;
-
-    h2{
-        border-bottom: 1px solid lighten(#464646, 60);
-        padding-bottom: 3px;
-    }
-
-    .control-group{
-        @extend %clearfix;
-        border: 1px solid #DFDFDF;
-        padding: 5px;
-        background: white;
-        display: inline-block;
-        float: left;
-        margin-left: 10px;
-    }
-
-    label{
-        font-family: $font-family;
-        font-size: 15px;
-        padding: 5px;
-        display: block;
-    }
-
-    .controls{
-
-    }
 }
 
 .wp-editor-container {
