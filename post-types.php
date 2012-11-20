@@ -15,7 +15,7 @@ class Post_types {
                 'name'  => __('Post Sections', 'sectionedcontent' ),
             ),
             'public'                => true,
-            'show_ui'               => true,
+            'show_ui'               => false,
             'capability_type'       => 'post',
             'publicly_queryable'    => true,
             'exclude_from_search'   => true,
