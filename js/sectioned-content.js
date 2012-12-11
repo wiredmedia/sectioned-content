@@ -212,7 +212,7 @@ var SECTIONED = (function (module) {
             });
         }
 
-        function addTab(tabId = null){
+        function addTab(tabId){
             var $addTabBtn, idPrefix, tabCount;
 
             $addTabBtn = el.tabNav.children('li:last-child').remove();
