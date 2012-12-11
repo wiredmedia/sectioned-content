@@ -60,6 +60,10 @@ class Plugin {
             return;
         }
 
+        if( $post->post_type != 'page' ) {
+            return;
+        }
+
         wp_register_style( 'sectionedcontent', plugins_url('css/sectioned-content.css', __FILE__) );
         wp_enqueue_style( 'sectionedcontent' );
 
